@@ -45,7 +45,7 @@ public class BallPhysics{
     private float mass;
     private float kineticenergy;
 
-    private float gravity = (float) .8;
+    private float gravity = (float) .98;
     private float frictionX = (float) .9;
     private float frictionY = (float) .7;
 
@@ -70,6 +70,9 @@ public class BallPhysics{
 
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.play(); // Start animation
+    }
+    public void newBall(){
+        circle.relocate(0, 0);
     }
 
     public HBox createGameScore() {                                        //This function creates the top title in the game
@@ -125,6 +128,8 @@ public class BallPhysics{
         ballX = (float) (circle.getLayoutX() + ballSpeedX);                     //First add x, y vectors
         ballY = (float) (circle.getLayoutY() + ballSpeedY);
 
+        ballSpeedY += gravity;
+
         final Bounds bounds = ballPane.getBoundsInLocal();                      // Then check if this new vectors collide with walls
         atRightBorder = ballX > (bounds.getMaxX() - circle.getFitHeight());
         atLeftBorder = ballX < (bounds.getMinX());
@@ -135,19 +140,24 @@ public class BallPhysics{
         if (atRightBorder) {                                            // If we have collision then perform action
             ballSpeedX = (float) (-ballSpeedX * frictionX);
             ballX = (float) (bounds.getMaxX() - circle.getFitHeight());
+
         } else if (atLeftBorder) {
             ballSpeedX = (float) (-ballSpeedX * frictionX);
-            ballX = (float) bounds.getMinX();;
+            ballX = (float) bounds.getMinX();
         }
         if (atBottomBorder) {
             ballSpeedY = (float) (-ballSpeedY * frictionY);
             ballSpeedX = (float) (ballSpeedX * frictionX);
             ballY = (float) (bounds.getMaxY() - circle.getFitHeight());
+
+            if(ballSpeedY < 0 && ballSpeedY > -4.0){
+                ballSpeedY = 0;
+                mass = 100;
+
+            }
         }else if(atTopBorder){
             ballSpeedY = -ballSpeedY;
             ballY = (float) bounds.getMinY();
-        } else{                                                             // If no collisions, then apply gravity vector
-            ballSpeedY += gravity;
         }
 
         circle.setLayoutX(ballX);                                       // Finally, move ball
@@ -214,5 +224,12 @@ public class BallPhysics{
     public Pane getScorePane(){
         return scorePane;
     }
+
+    /*
+    public Acceleration(){
+        dx += acceleration;
+        dy += acceleration;
+    }
+     */
 
 }

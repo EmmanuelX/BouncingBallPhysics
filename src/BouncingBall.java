@@ -28,6 +28,9 @@ public class BouncingBall extends Application {
             else if (e.getCode() == KeyCode.SPACE) {    // This allows me to pause screen
                 ball.pause();
             }
+            else if (e.getCode() == KeyCode.A){
+                ball.newBall();
+            }
         });
 
         Scene scene = new Scene(borderPane, 750, 750);
